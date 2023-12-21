@@ -1,6 +1,8 @@
 import { Outlet } from "react-router-dom";
 import { motion, useScroll, useSpring } from "framer-motion";
 import NavBar from "./Navbar";
+import Footer from "./Footer";
+import { Toaster } from "react-hot-toast";
 
 const Root = () => {
   const { scrollYProgress } = useScroll();
@@ -8,16 +10,24 @@ const Root = () => {
     stiffness: 100,
     damping: 30,
     restDelta: 0.001,
-    top: "5rem",
+    top: "6rem",
   });
   return (
-    <div className="">
-      <NavBar></NavBar>
+    <div className="flex flex-col">
+      <div>
+        <NavBar></NavBar>
+      </div>
       <motion.div
-        className="fixed top-18 left-0 right-0 h-2 bg-blueViolet origin-[0] z-[40]"
+        className="fixed top-18 left-0 right-0 h-2 bg-blueViolet origin-[0] z-[100]"
         style={{ scaleX }}
       />
-      <Outlet></Outlet>
+      <div className="h-[calc(100%-5rem)] px-3">
+        <Outlet></Outlet>
+      </div>
+      <div className="">
+        <Footer></Footer>
+      </div>
+      <Toaster></Toaster>
     </div>
   );
 };

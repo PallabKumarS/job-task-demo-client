@@ -11,8 +11,7 @@ import {
 } from "firebase/auth";
 import auth from "./firebase-key";
 import toast from "react-hot-toast";
-import axios from "axios";
-import { baseUrl } from "../shared/useAxios";
+import { axiosPublic } from "../shared/useAxios";
 
 export const AuthContext = createContext(null);
 
@@ -30,23 +29,23 @@ const AuthProvider = ({ children }) => {
       setLoading(false);
 
       if (currentUser) {
-        //   axios.get(`${baseUrl}/users/${loggedUser.email}`).then((res) => {
-        //     setUserData(res.data);
-        //     setRoleLoading(false);
-        //   });
-        //   axios
-        //     .post(`${baseUrl}/jwt`, loggedUser, {
-        //       withCredentials: true,
-        //     })
-        //     .then((res) => {
-        //       console.log(res.data);
-        //     });
-        // } else {
-        //   axios
-        //     .post(`${baseUrl}/logout`, loggedUser, { withCredentials: true })
-        //     .then((res) => {
-        //       console.log(res.data);
-        //     });
+        axiosPublic.get(`/users/${loggedUser?.email}`).then((res) => {
+          setUserData(res.data);
+          setRoleLoading(false);
+        });
+        axiosPublic
+          .post(`/jwt`, loggedUser, {
+            withCredentials: true,
+          })
+          .then((res) => {
+            console.log(res.data);
+          });
+      } else {
+        axiosPublic
+          .post(`/logout`, loggedUser, { withCredentials: true })
+          .then((res) => {
+            console.log(res.data);
+          });
       }
     });
     return () => {

@@ -1,6 +1,5 @@
 import { BsFacebook, BsTwitter, BsYoutube } from "react-icons/bs";
-import { gradientTextClasses } from "../shared/GradientText";
-import logo from "/logo.jpg";
+import logo from "/demoLogo.png";
 import { useContext } from "react";
 import { AuthContext } from "../provider/AuthProvider";
 
@@ -15,9 +14,11 @@ const Footer = () => {
     <div className="mt-20 text-center mx-auto">
       <footer className="footer p-10 bg-base-200 justify-evenly">
         <aside className="text-center">
-          <img src={logo} alt="" />
-          <p className={`text-lg font-medium ${gradientTextClasses}`}>
-            <span className="text-3xl font-bold">Hype Electronics</span>
+          <img src={logo} alt="" className="mx-auto h-40" />
+          <p className={`text-lg font-medium`}>
+            <span className="text-3xl font-bold text-teal-500">
+              Task Manager
+            </span>
             <br />
             Providing Reliable Service Since 2014
           </p>
@@ -27,7 +28,7 @@ const Footer = () => {
           <div className="mx-auto mb-10">
             <nav className="text-center mx-auto">
               <header
-                className={`text-lg text-center mx-auto font-medium text-lime-500 mb-3`}
+                className={`text-lg text-center mx-auto font-medium text-teal-500 mb-3`}
               >
                 Social
               </header>

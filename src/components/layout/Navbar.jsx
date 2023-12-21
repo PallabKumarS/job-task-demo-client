@@ -124,8 +124,10 @@ const NavBar = () => {
         <Link to="/">
           <div className="flex flex-col md:flex-row items-center">
             <img src={logo} className="w-20" alt="" />
-            <span className="text-blue-500 text-2xl md:mr-1">Landing</span>{" "}
-            <span className="text-blueViolet text-2xl font-semibold">Page</span>
+            <span className="text-blue-500 text-2xl md:mr-1">Task</span>{" "}
+            <span className="text-teal-500 text-2xl font-semibold">
+              Manager
+            </span>
           </div>
         </Link>
       </div>

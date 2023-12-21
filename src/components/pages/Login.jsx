@@ -1,16 +1,16 @@
-import { useContext, useState } from "react";
-import { BsEyeSlashFill, BsEyeFill } from "react-icons/bs";
+import { useState } from "react";
+import { BsEyeSlashFill, BsEyeFill, BsFacebook } from "react-icons/bs";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { AuthContext } from "../provider/AuthProvider";
 import { Helmet } from "react-helmet";
-import MotionBtn from "../shared/MotionBtn";
+import useAuth from "../shared/useAuth";
+import { axiosPublic } from "../shared/useAxios";
 
 const Login = () => {
   const [show, setShow] = useState(false);
 
-  const { handleAlert, googleLogIn, logIn, setLoading } =
-    useContext(AuthContext);
+  const { handleAlert, googleLogIn, logIn, setLoading, fbLogIn, userData } =
+    useAuth();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -32,29 +32,87 @@ const Login = () => {
       });
   };
 
-  const handleGoogleLogIn = () => {
-    googleLogIn()
-      .then(() => {
+  const handleGoogleLogIn = async () => {
+    setLoading(true);
+    try {
+      const result = await googleLogIn();
+      const checkUser = await checkUserExists(result?.user?.email);
+      if (checkUser) {
         navigate(location?.state ? location.state : "/");
         handleAlert("success", "User LoggedIn Successfully");
-      })
-      .catch((error) => {
-        handleAlert("error", `${error.message}`);
-        setLoading(false);
-      });
+      } else {
+        createRoles(result?.user?.email, result?.user?.displayName);
+      }
+    } catch (error) {
+      handleAlert("error", error.message);
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFBLogIn = async () => {
+    setLoading(true);
+    try {
+      const result = await fbLogIn();
+      const checkUser = await checkUserExists(result?.user?.email);
+      if (checkUser) {
+        navigate(location?.state ? location.state : "/");
+        handleAlert("success", "User LoggedIn Successfully");
+      } else {
+        createRoles(result?.user?.email, result?.user?.displayName);
+      }
+    } catch (error) {
+      handleAlert("error", error.message);
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // const checkUserExists = (email) => {
+  //   axiosSecure.get(`${baseUrl}/users?email=${email}`).then((res) => {
+  //     if (res.data?.email == email) {
+  //       setUserData(res.data);
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   });
+  // };
+  const checkUserExists = (email) => {
+    if (userData?.email == email) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const createRoles = (email, name) => {
+    const userData = {
+      email: email,
+      name: name,
+      role: "visitor",
+    };
+
+    axiosPublic.post(`/users?email=${email}`, userData).then((res) => {
+      if (res.status == 201) {
+        handleAlert("success", "User LoggedIn Successfully");
+      }
+    });
   };
 
   return (
     <div className="">
       <Helmet>
-        <title>HE | Login</title>
+        <title>Task Manager | Login</title>
       </Helmet>
-      <div className="bg-gradient-to-r from-purple-500 to-blue-500 py-5 md:w-3/4 xl:w-1/2 mx-auto mt-10 relative text-center mb-10 px-3 rounded-lg">
-        <h2 className="text-3xl mt-5 mb-5 text-lime-500">Please Login Here</h2>
+      <div className=" py-5 md:w-3/4 xl:w-1/2 mx-auto mt-10 relative text-center mb-10 px-3 rounded-lg">
+        <h2 className="text-3xl mt-5 mb-5 text-teal-500">Please Login Here</h2>
 
         <form onSubmit={handleLogIn}>
           <input
-            className="w-3/4 mb-3 rounded-lg py-2 px-3 bg-black"
+            className="w-3/4 mb-3 rounded-lg py-2 px-3 "
             type="email"
             name="email"
             placeholder="Enter a Valid Email"
@@ -63,7 +121,7 @@ const Login = () => {
 
           <br />
           <input
-            className="w-3/4 mb-3 rounded-lg py-2 px-3 bg-black"
+            className="w-3/4 mb-3 rounded-lg py-2 px-3 "
             type={show ? "text" : "password"}
             name="password"
             placeholder="Enter a Password"
@@ -77,26 +135,31 @@ const Login = () => {
           </span>
 
           <br />
-          <MotionBtn width={75} text={"Login"}>
-            <input
-              className="mb-3 w-3/4 py-2 px-3 text-lime-400 text-md rounded-xl bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500"
-              type="submit"
-              value="LogIn"
-            />
-          </MotionBtn>
+          <button className="w-1/2 rounded-lg text-teal-500 font-semibold text-lg bg-sky-600 py-3 hover:bg-sky-800 hover:text-teal-700">
+            Login
+          </button>
         </form>
 
         <div className="text-center mx-auto mb-3">
-          <p className="mb-2">Or Login Using</p>
-          <FcGoogle
+          <p className="mb-2 mt-2">Or Login Using</p>
+          <button
             onClick={handleGoogleLogIn}
-            className="text-center mx-auto w-10 h-10"
-          ></FcGoogle>
+            className="w-1/2 rounded-lg font-semibold text-lg bg-cyan-600 py-3 hover:bg-cyan-800 "
+          >
+            <FcGoogle className="text-center mx-auto w-10 h-10"></FcGoogle>
+          </button>
+          <p className="mb-2 mt-2">Or Login Using</p>
+          <button
+            onClick={handleFBLogIn}
+            className="w-1/2 rounded-lg font-semibold text-lg bg-cyan-600 py-3 hover:bg-cyan-800 "
+          >
+            <BsFacebook className="text-center mx-auto w-10 h-10 text-blue-600"></BsFacebook>
+          </button>
         </div>
 
         <p>
           Do not have an account? <br /> Please{" "}
-          <span className="font-semibold text-lime-500 ml-2 hover:underline">
+          <span className="font-semibold text-teal-500 ml-2 hover:underline">
             <Link to="/register">Register</Link>
           </span>
         </p>
