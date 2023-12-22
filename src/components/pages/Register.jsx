@@ -123,7 +123,7 @@ const Register = () => {
       const checkUser = await checkUserExists(result?.user?.email);
       if (checkUser) {
         navigate("/dashboard/profile");
-        handleAlert("success", "User LoggedIn Successfully");
+        handleAlert("success", "User Logged In Successfully");
       } else {
         createRoles(
           result?.user?.email,
@@ -146,7 +146,7 @@ const Register = () => {
       const checkUser = await checkUserExists(result?.user?.email);
       if (checkUser) {
         navigate("/dashboard/profile");
-        handleAlert("success", "User LoggedIn Successfully");
+        handleAlert("success", "User Logged In Successfully");
       } else {
         createRoles(
           result?.user?.email,
@@ -191,7 +191,7 @@ const Register = () => {
 
     axiosPublic.post(`/users`, userData).then((res) => {
       if (res.status == 201) {
-        handleAlert("success", "User LoggedIn Successfully");
+        handleAlert("success", "User Logged In Successfully");
       }
     });
   };

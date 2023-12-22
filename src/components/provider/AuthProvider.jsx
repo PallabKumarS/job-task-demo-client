@@ -79,7 +79,7 @@ const AuthProvider = ({ children }) => {
 
   const logOut = () => {
     setLoading(true);
-    handleAlert("warn", "User LoggedOut");
+    handleAlert("warn", "User Logged Out");
     return signOut(auth);
   };
 

@@ -1,13 +1,18 @@
 import CustomContainer from "../shared/CustomContainer";
 import CustomSpinner from "../shared/CustomSpinner";
+import Loader from "../shared/Loader";
 import useAuth from "../shared/useAuth";
 
 const Profile = () => {
   const { user, userData, loading, roleLoading } = useAuth();
 
+  const { isLoading, data: tasks, refetch } = Loader("/tasks", "tasks");
+
   if (loading) {
     if (roleLoading) {
-      return <CustomSpinner></CustomSpinner>;
+      if (isLoading) {
+        return <CustomSpinner></CustomSpinner>;
+      }
     }
   }
 
