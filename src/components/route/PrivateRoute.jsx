@@ -1,21 +1,18 @@
-import { useContext } from "react";
 import PropTypes from "prop-types";
-import { Navigate, useLocation } from "react-router-dom";
-import { AuthContext } from "../provider/AuthProvider";
-import Spinner from "../shared/Spinner";
+import { Navigate } from "react-router-dom";
+import useAuth from "../shared/useAuth";
+import CustomSpinner from "../shared/CustomSpinner";
 
 const PrivateRoute = ({ children }) => {
-  const { user, loading } = useContext(AuthContext);
-
-  const location = useLocation();
+  const { user, loading } = useAuth();
 
   if (loading) {
-    return <Spinner></Spinner>;
+    return <CustomSpinner></CustomSpinner>;
   } else if (user) {
     return children;
   }
 
-  return <Navigate state={location.pathname} to="/login"></Navigate>;
+  return <Navigate to="/login"></Navigate>;
 };
 
 PrivateRoute.propTypes = {

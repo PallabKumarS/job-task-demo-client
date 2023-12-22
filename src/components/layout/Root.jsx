@@ -13,7 +13,7 @@ const Root = () => {
     top: "6rem",
   });
   return (
-    <div className="flex flex-col">
+    <div className="">
       <div>
         <NavBar></NavBar>
       </div>
@@ -21,7 +21,7 @@ const Root = () => {
         className="fixed top-18 left-0 right-0 h-2 bg-blueViolet origin-[0] z-[100]"
         style={{ scaleX }}
       />
-      <div className="h-[calc(100%-5rem)] px-3">
+      <div className="">
         <Outlet></Outlet>
       </div>
       <div className="">

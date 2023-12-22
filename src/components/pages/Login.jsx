@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { BsEyeSlashFill, BsEyeFill, BsFacebook } from "react-icons/bs";
 import { FcGoogle } from "react-icons/fc";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import useAuth from "../shared/useAuth";
 import { axiosPublic } from "../shared/useAxios";
@@ -13,7 +13,6 @@ const Login = () => {
     useAuth();
 
   const navigate = useNavigate();
-  const location = useLocation();
 
   const handleLogIn = (e) => {
     e.preventDefault();
@@ -23,7 +22,7 @@ const Login = () => {
 
     logIn(email, password)
       .then(() => {
-        navigate(location?.state ? location.state : "/");
+        navigate("/dashboard/profile");
         handleAlert("success", "User LoggedIn Successfully");
       })
       .catch((error) => {
@@ -38,10 +37,14 @@ const Login = () => {
       const result = await googleLogIn();
       const checkUser = await checkUserExists(result?.user?.email);
       if (checkUser) {
-        navigate(location?.state ? location.state : "/");
+        navigate("/dashboard/profile");
         handleAlert("success", "User LoggedIn Successfully");
       } else {
-        createRoles(result?.user?.email, result?.user?.displayName);
+        createRoles(
+          result?.user?.email,
+          result?.user?.displayName,
+          result?.user?.photoURL
+        );
       }
     } catch (error) {
       handleAlert("error", error.message);
@@ -57,10 +60,14 @@ const Login = () => {
       const result = await fbLogIn();
       const checkUser = await checkUserExists(result?.user?.email);
       if (checkUser) {
-        navigate(location?.state ? location.state : "/");
+        navigate("/dashboard/profile");
         handleAlert("success", "User LoggedIn Successfully");
       } else {
-        createRoles(result?.user?.email, result?.user?.displayName);
+        createRoles(
+          result?.user?.email,
+          result?.user?.displayName,
+          result?.user?.photoURL
+        );
       }
     } catch (error) {
       handleAlert("error", error.message);
@@ -88,16 +95,18 @@ const Login = () => {
     }
   };
 
-  const createRoles = (email, name) => {
+  const createRoles = (email, name, photo) => {
     const userData = {
       email: email,
       name: name,
+      photo: photo,
       role: "visitor",
     };
 
     axiosPublic.post(`/users?email=${email}`, userData).then((res) => {
       if (res.status == 201) {
         handleAlert("success", "User LoggedIn Successfully");
+        navigate("/dashboard/profile");
       }
     });
   };

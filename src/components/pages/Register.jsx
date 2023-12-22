@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { BsEyeSlashFill, BsEyeFill, BsFacebook } from "react-icons/bs";
 import { FcGoogle } from "react-icons/fc";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { updateProfile } from "firebase/auth";
 import { Helmet } from "react-helmet";
 import useAuth from "../shared/useAuth";
@@ -9,9 +9,10 @@ import { axiosPublic } from "../shared/useAxios";
 
 const Register = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [show, setShow] = useState(false);
   // const [selectedImage, setSelectedImage] = useState(null);
+
+  const staticPhoto = "https://i.ibb.co/Ky7xfRv/user.png";
 
   const {
     handleAlert,
@@ -49,7 +50,7 @@ const Register = () => {
     e.preventDefault();
     const form = e.target;
     const name = form.name.value;
-    const photo = form.photo.value;
+    const photo = form.photo.value || staticPhoto;
     const email = form.email.value;
     const password = form.password.value;
 
@@ -102,9 +103,9 @@ const Register = () => {
           displayName: name,
           photoURL: photo,
         });
-        createRoles(email, name);
+        createRoles(email, name, photo);
         handleAlert("success", "User Created Successfully");
-        navigate(location?.state ? location.state : "/");
+        navigate("/dashboard/profile");
       })
       .catch((error) => {
         handleAlert("error", `${error.message}`);
@@ -121,10 +122,14 @@ const Register = () => {
       const result = await googleLogIn();
       const checkUser = await checkUserExists(result?.user?.email);
       if (checkUser) {
-        navigate(location?.state ? location.state : "/");
+        navigate("/dashboard/profile");
         handleAlert("success", "User LoggedIn Successfully");
       } else {
-        createRoles(result.user);
+        createRoles(
+          result?.user?.email,
+          result?.user?.displayName,
+          result?.user?.photoURL
+        );
       }
     } catch (error) {
       handleAlert("error", error.message);
@@ -140,10 +145,14 @@ const Register = () => {
       const result = await fbLogIn();
       const checkUser = await checkUserExists(result?.user?.email);
       if (checkUser) {
-        navigate(location?.state ? location.state : "/");
+        navigate("/dashboard/profile");
         handleAlert("success", "User LoggedIn Successfully");
       } else {
-        createRoles(result.user);
+        createRoles(
+          result?.user?.email,
+          result?.user?.displayName,
+          result?.user?.photoURL
+        );
       }
     } catch (error) {
       handleAlert("error", error.message);
@@ -172,10 +181,11 @@ const Register = () => {
     }
   };
 
-  const createRoles = (email, name) => {
+  const createRoles = (email, name, photo) => {
     const userData = {
       email: email,
       name: name,
+      photo: photo,
       role: "visitor",
     };
 
