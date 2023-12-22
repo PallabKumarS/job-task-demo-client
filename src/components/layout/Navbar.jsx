@@ -49,9 +49,37 @@ const NavBar = () => {
               ? "font-extrabold text-yellow-500 mr-1 bg-sky-600 p-3 rounded-lg"
               : "mr-1 text-sky-400 hover:text-yellow-500 font-semibold text-lg"
           }
-          to="/allServices"
+          to="/services"
         >
           Services
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          className={({ isActive, isPending }) =>
+            isPending
+              ? "pending "
+              : isActive
+              ? "font-extrabold text-yellow-500 mr-1 bg-sky-600 p-3 rounded-lg"
+              : "mr-1 text-sky-400 hover:text-yellow-500 font-semibold text-lg"
+          }
+          to="/about-us"
+        >
+          About Us
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          className={({ isActive, isPending }) =>
+            isPending
+              ? "pending "
+              : isActive
+              ? "font-extrabold text-yellow-500 mr-1 bg-sky-600 p-3 rounded-lg"
+              : "mr-1 text-sky-400 hover:text-yellow-500 font-semibold text-lg"
+          }
+          to="/contact-us"
+        >
+          Contact
         </NavLink>
       </li>
 

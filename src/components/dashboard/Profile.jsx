@@ -6,7 +6,7 @@ import useAuth from "../shared/useAuth";
 const Profile = () => {
   const { user, userData, loading, roleLoading } = useAuth();
 
-  const { isLoading, data: tasks, refetch } = Loader("/tasks", "tasks");
+  const { isLoading, data: tasks } = Loader("/tasks", "tasks");
 
   if (loading) {
     if (roleLoading) {

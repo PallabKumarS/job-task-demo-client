@@ -9,6 +9,7 @@ import PrivateRoute from "./PrivateRoute";
 import Profile from "../dashboard/Profile";
 import AllTask from "../dashboard/AllTask";
 import AddTask from "../dashboard/AddTask";
+import WorkInProgress from "../shared/WorkInProgress";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,18 @@ const router = createBrowserRouter([
       {
         path: "/register",
         element: <Register></Register>,
+      },
+      {
+        path: "services",
+        element: <WorkInProgress></WorkInProgress>,
+      },
+      {
+        path: "about-us",
+        element: <WorkInProgress></WorkInProgress>,
+      },
+      {
+        path: "contact-us",
+        element: <WorkInProgress></WorkInProgress>,
       },
     ],
   },
