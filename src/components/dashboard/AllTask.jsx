@@ -1,4 +1,5 @@
 // AllTask.jsx
+import { useDrop } from "react-dnd";
 import CustomContainer from "../shared/CustomContainer";
 import CustomSpinner from "../shared/CustomSpinner";
 import Loader from "../shared/Loader";
@@ -10,6 +11,69 @@ const AllTask = () => {
   const { user, handleAlert } = useAuth();
 
   const { isLoading, data: tasks, refetch } = Loader("/tasks", "tasks");
+
+  const handleTodoDrop = (item) => {
+    // Handle task drop in Todo section
+    axiosPublic
+      .put(`/tasks/${item.id}`, { status: "todo" })
+      .then((res) => {
+        if (res.status === 201) {
+          handleAlert("success", "Task status updated successfully");
+          refetch();
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleOngoingDrop = (item) => {
+    // Handle task drop in Ongoing section
+    axiosPublic
+      .put(`/tasks/${item.id}`, { status: "ongoing" })
+      .then((res) => {
+        if (res.status === 201) {
+          handleAlert("success", "Task status updated successfully");
+          refetch();
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleCompletedDrop = (item) => {
+    // Handle task drop in Completed section
+    axiosPublic
+      .put(`/tasks/${item.id}`, { status: "completed" })
+      .then((res) => {
+        if (res.status === 201) {
+          handleAlert("success", "Task status updated successfully");
+          refetch();
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const [, todoDrop] = useDrop({
+    accept: "TASK",
+    drop: handleTodoDrop,
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+    }),
+  });
+
+  const [, ongoingDrop] = useDrop({
+    accept: "TASK",
+    drop: handleOngoingDrop,
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+    }),
+  });
+
+  const [, completedDrop] = useDrop({
+    accept: "TASK",
+    drop: handleCompletedDrop,
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+    }),
+  });
 
   if (isLoading) {
     return <CustomSpinner></CustomSpinner>;
@@ -36,7 +100,10 @@ const AllTask = () => {
 
       <hr className="border-b-2 border-gray-500 mx-5"></hr>
 
-      <section className="mb-20 py-10 text-center flex flex-wrap gap-10 justify-around items-center">
+      <section
+        ref={todoDrop}
+        className="mb-20 py-10 text-center flex flex-wrap gap-10 justify-around items-center"
+      >
         {todoTasks &&
           todoTasks?.map((task, index) => (
             <TaskCard
@@ -53,7 +120,10 @@ const AllTask = () => {
 
       <hr className="border-b-2 border-gray-500 mx-5"></hr>
 
-      <section className="mb-20 py-20 text-center flex flex-wrap gap-10 justify-around items-center">
+      <section
+        ref={ongoingDrop}
+        className="mb-20 py-20 text-center flex flex-wrap gap-10 justify-around items-center"
+      >
         {ongoingTasks &&
           ongoingTasks?.map((task, index) => (
             <TaskCard
@@ -70,7 +140,10 @@ const AllTask = () => {
 
       <hr className="border-b-2 border-gray-500 mx-5"></hr>
 
-      <section className="mb-20 py-20 text-center flex flex-wrap gap-10 justify-around items-center">
+      <section
+        ref={completedDrop}
+        className="mb-20 py-20 text-center flex flex-wrap gap-10 justify-around items-center"
+      >
         {completedTasks &&
           completedTasks?.map((task, index) => (
             <TaskCard

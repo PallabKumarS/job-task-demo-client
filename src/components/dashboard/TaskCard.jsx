@@ -1,4 +1,3 @@
-/* eslint-disable react/display-name */
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { MdDeleteForever, MdEdit } from "react-icons/md";
@@ -6,10 +5,19 @@ import UpdateModal from "./UpdateModal";
 import Swal from "sweetalert2";
 import { axiosPublic } from "../shared/useAxios";
 import useAuth from "../shared/useAuth";
+import { useDrag } from "react-dnd";
 
 const TaskCard = ({ task, refetch }) => {
   const { handleAlert } = useAuth();
   const [selectedRowData, setSelectedRowData] = useState(null);
+
+  const [{ isDragging }, dragRef] = useDrag({
+    type: "TASK",
+    item: () => ({ id: task._id }),
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  });
 
   const handleEdit = () => {
     setSelectedRowData(task);
@@ -37,13 +45,18 @@ const TaskCard = ({ task, refetch }) => {
   };
 
   return (
-    <div>
+    <div
+      ref={dragRef}
+      style={{ opacity: isDragging ? 0.5 : 1 }}
+      className=" bg-base-200 shadow-lg rounded-lg p-10"
+    >
       <p className="text-lg mb-2">{task?.taskName}</p>
-      <p className="text-sm">{task?.description}</p>
+      <p className="text-sm mb-2">{task?.description}</p>
       <p className="text-lg mb-2">
         Created by <span className="text-teal-500">{task?.hostName}</span>
       </p>
-      <div className="flex gap-5">
+      <p>Created At {new Date(task?.time).toLocaleString()}</p>
+      <div className="flex gap-5 mt-3">
         <button
           className="btn bg-violet-500 hover:bg-violet-900 text-lime-500"
           onClick={() => handleDelete(task?._id)}
