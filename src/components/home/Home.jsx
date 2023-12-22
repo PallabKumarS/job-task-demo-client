@@ -2,10 +2,14 @@ import banner from "../../assets/homeBanner.png";
 import dev from "../../assets/devIcon.png";
 import banker from "../../assets/bankerIcon.png";
 import prop from "../../assets/professionalIcon.png";
+import { Helmet } from "react-helmet";
 
 const Home = () => {
   return (
     <div>
+      <Helmet>
+        <title>Task Manager | Home</title>
+      </Helmet>
       {/* Banner Section */}
       <section className="bg-blue-500 text-white py-10">
         <div className="container mx-auto text-center">

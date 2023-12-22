@@ -1,11 +1,15 @@
 import { Link, useRouteError } from "react-router-dom";
 import bg from "../../assets/error.webp";
 import NavBar from "../layout/Navbar";
+import { Helmet } from "react-helmet";
 
 const ErrorPage = () => {
   const error = useRouteError();
   return (
     <div>
+      <Helmet>
+        <title>Task Manager | ErrorPage</title>
+      </Helmet>
       <NavBar></NavBar>
       <div className="mt-10 text-center px-3">
         <img src={bg} alt="" className="mx-auto rounded-lg md:h-96" />

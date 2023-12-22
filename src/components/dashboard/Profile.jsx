@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet";
 import CustomContainer from "../shared/CustomContainer";
 import CustomSpinner from "../shared/CustomSpinner";
 import Loader from "../shared/Loader";
@@ -31,6 +32,9 @@ const Profile = () => {
 
   return (
     <CustomContainer>
+      <Helmet>
+        <title>Task Manager | Profile</title>
+      </Helmet>
       <div className="card w-96 bg-base-300 shadow-xl mx-auto mt-20">
         <figure className="px-10 pt-10">
           <img src={user?.photoURL} alt="" className="rounded-xl" />

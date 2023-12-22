@@ -6,6 +6,7 @@ import Loader from "../shared/Loader";
 import useAuth from "../shared/useAuth";
 import { axiosPublic } from "../shared/useAxios";
 import TaskCard from "./TaskCard";
+import { Helmet } from "react-helmet";
 
 const AllTask = () => {
   const { user, handleAlert } = useAuth();
@@ -93,6 +94,9 @@ const AllTask = () => {
 
   return (
     <CustomContainer className={`mt-10`}>
+      <Helmet>
+        <title>Task Manager | Management</title>
+      </Helmet>
       <h1 className="text-4xl font-bold text-center mb-20">Manage All Tasks</h1>
 
       {/* To Do section */}
